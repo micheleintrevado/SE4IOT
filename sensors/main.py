@@ -9,7 +9,14 @@ def main():
     system = System()
     client = mqtt.Client("ID1")
     client.on_publish = lambda client, userdata, mid: print("PUBLISH: ", mid)
-    client.connect("172.17.0.2")
+    client.connect("172.20.0.100")
+
+    for index in range (0,5):
+        SolarPanel.initialize_shield(index, client, 0)
+
+    for index in range (0,5):
+        WindTurbine.initialize_running(index, client, 1)
+
     while True:
         system.publish(client)
 

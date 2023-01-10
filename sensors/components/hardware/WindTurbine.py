@@ -4,6 +4,9 @@ from paho.mqtt.client import Client
 
 class WindTurbine:
     @staticmethod
+    def initialize_running(index: int, client: Client, value: int):
+        client.publish(f"WindTurbine/{index}/running", value)
+    @staticmethod
     def simulate(index: int, client: Client, wind: int):
 
         speed = 0

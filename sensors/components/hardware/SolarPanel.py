@@ -4,6 +4,9 @@ from random import randint
 
 class SolarPanel:
     @staticmethod
+    def initialize_shield(index: int, client: Client, value: int):
+        client.publish(f"SolarPanel/{index}/shield", value)
+    @staticmethod
     def simulate(index: int, client: Client, day: int, weather: int):
 
         temperature = 0

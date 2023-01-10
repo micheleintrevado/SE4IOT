@@ -1,0 +1,1609 @@
+[
+    {
+        "id": "f6f2187d.f17ca8",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "36af154aa5adc422",
+        "type": "mqtt in",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "topic": "system/day",
+        "qos": "0",
+        "datatype": "json",
+        "broker": "3f89dc9d9f939810",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 130,
+        "y": 80,
+        "wires": [
+            [
+                "1cce0f2e8c2c4263"
+            ]
+        ]
+    },
+    {
+        "id": "6ea95fbf1c59eecf",
+        "type": "switch",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "0",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "1",
+                "vt": "str"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 3,
+        "x": 110,
+        "y": 1480,
+        "wires": [
+            [
+                "93d9d5a5d8a0236d"
+            ],
+            [
+                "93d9d5a5d8a0236d"
+            ],
+            [
+                "93d9d5a5d8a0236d"
+            ]
+        ]
+    },
+    {
+        "id": "93d9d5a5d8a0236d",
+        "type": "ui_template",
+        "z": "f6f2187d.f17ca8",
+        "group": "cd00130e58b07552",
+        "name": "",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "format": "<div ng-bind-html=\"msg.payload\"></div>\n<img src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Sun_symbol_yellow.svg/1200px-Sun_symbol_yellow.svg.png\">",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 340,
+        "y": 1480,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "b7f1f0dbe69c9dcd",
+        "type": "influxdb out",
+        "z": "f6f2187d.f17ca8",
+        "influxdb": "7ae4df28c6b53877",
+        "name": "",
+        "measurement": "system",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "database",
+        "precisionV18FluxV20": "s",
+        "retentionPolicyV18Flux": "",
+        "org": "univaq",
+        "bucket": "iot",
+        "x": 600,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "55ceeade95ed504a",
+        "type": "influxdb in",
+        "z": "f6f2187d.f17ca8",
+        "influxdb": "7ae4df28c6b53877",
+        "name": "",
+        "query": "from(bucket: \"iot\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"solarPanel\")\n  |> filter(fn: (r) => r[\"_field\"] == \"new\")\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\n  |> yield(name: \"mean\")",
+        "rawOutput": false,
+        "precision": "",
+        "retentionPolicy": "",
+        "org": "univaq",
+        "x": 320,
+        "y": 1360,
+        "wires": [
+            [
+                "cffcec1922638b63"
+            ]
+        ]
+    },
+    {
+        "id": "cffcec1922638b63",
+        "type": "debug",
+        "z": "f6f2187d.f17ca8",
+        "name": "debug 2",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 500,
+        "y": 1360,
+        "wires": []
+    },
+    {
+        "id": "0cec25c7a2462606",
+        "type": "inject",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 140,
+        "y": 1360,
+        "wires": [
+            [
+                "55ceeade95ed504a"
+            ]
+        ]
+    },
+    {
+        "id": "3df959501a61c86e",
+        "type": "inject",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 140,
+        "y": 1420,
+        "wires": [
+            [
+                "b098bcf65e08150b"
+            ]
+        ]
+    },
+    {
+        "id": "b098bcf65e08150b",
+        "type": "influxdb in",
+        "z": "f6f2187d.f17ca8",
+        "influxdb": "7ae4df28c6b53877",
+        "name": "",
+        "query": "from(bucket: \"iot\")\n  |> range(start: 2023-01-04)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"solarPanel\")\n  |> filter(fn: (r) => r[\"_field\"] == \"new\")\n  |> yield(name: \"mean\")",
+        "rawOutput": false,
+        "precision": "",
+        "retentionPolicy": "",
+        "org": "univaq",
+        "x": 300,
+        "y": 1420,
+        "wires": [
+            [
+                "64b16527370bc2a6"
+            ]
+        ]
+    },
+    {
+        "id": "64b16527370bc2a6",
+        "type": "debug",
+        "z": "f6f2187d.f17ca8",
+        "name": "debug 3",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 500,
+        "y": 1420,
+        "wires": []
+    },
+    {
+        "id": "cf195b8666dc8585",
+        "type": "mqtt in",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "topic": "system/wind",
+        "qos": "0",
+        "datatype": "json",
+        "broker": "3f89dc9d9f939810",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 130,
+        "y": 140,
+        "wires": [
+            [
+                "1d8ac2c78b3ab322"
+            ]
+        ]
+    },
+    {
+        "id": "15f7220ef0b24682",
+        "type": "mqtt in",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "topic": "system/weather",
+        "qos": "0",
+        "datatype": "json",
+        "broker": "3f89dc9d9f939810",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 140,
+        "y": 200,
+        "wires": [
+            [
+                "bc25f5fd78939d32"
+            ]
+        ]
+    },
+    {
+        "id": "1cce0f2e8c2c4263",
+        "type": "function",
+        "z": "f6f2187d.f17ca8",
+        "name": "msg day",
+        "func": "msg.payload = {day:msg.payload}\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 340,
+        "y": 80,
+        "wires": [
+            [
+                "b7f1f0dbe69c9dcd",
+                "3a141bcc3294c255"
+            ]
+        ]
+    },
+    {
+        "id": "1d8ac2c78b3ab322",
+        "type": "function",
+        "z": "f6f2187d.f17ca8",
+        "name": "msg wind",
+        "func": "msg.payload = { wind: msg.payload }\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 340,
+        "y": 140,
+        "wires": [
+            [
+                "b7f1f0dbe69c9dcd"
+            ]
+        ]
+    },
+    {
+        "id": "bc25f5fd78939d32",
+        "type": "function",
+        "z": "f6f2187d.f17ca8",
+        "name": "msg weather",
+        "func": "msg.payload = { weather: msg.payload }\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 350,
+        "y": 200,
+        "wires": [
+            [
+                "b7f1f0dbe69c9dcd"
+            ]
+        ]
+    },
+    {
+        "id": "939530b7a0dc5faf",
+        "type": "mqtt in",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "topic": "solarPanel/0/temperature",
+        "qos": "0",
+        "datatype": "json",
+        "broker": "3f89dc9d9f939810",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 170,
+        "y": 320,
+        "wires": [
+            [
+                "4cdff04ec8b5bdd8"
+            ]
+        ]
+    },
+    {
+        "id": "54e9e0e4651b12b9",
+        "type": "influxdb out",
+        "z": "f6f2187d.f17ca8",
+        "influxdb": "7ae4df28c6b53877",
+        "name": "",
+        "measurement": "SolarPanel0",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "database",
+        "precisionV18FluxV20": "s",
+        "retentionPolicyV18Flux": "",
+        "org": "univaq",
+        "bucket": "iot",
+        "x": 680,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "a2ac5c1e2d5012f1",
+        "type": "mqtt in",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "topic": "solarPanel/0/production",
+        "qos": "0",
+        "datatype": "json",
+        "broker": "3f89dc9d9f939810",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 160,
+        "y": 380,
+        "wires": [
+            [
+                "8e7190e57e270b6d"
+            ]
+        ]
+    },
+    {
+        "id": "df9198c20b6b1c0a",
+        "type": "mqtt in",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "topic": "solarPanel/0/light",
+        "qos": "0",
+        "datatype": "json",
+        "broker": "3f89dc9d9f939810",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 140,
+        "y": 440,
+        "wires": [
+            [
+                "d165cf010c99a05f"
+            ]
+        ]
+    },
+    {
+        "id": "4cdff04ec8b5bdd8",
+        "type": "function",
+        "z": "f6f2187d.f17ca8",
+        "name": "msg temperature",
+        "func": "msg.payload = {temperature:msg.payload}\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 410,
+        "y": 320,
+        "wires": [
+            [
+                "54e9e0e4651b12b9"
+            ]
+        ]
+    },
+    {
+        "id": "8e7190e57e270b6d",
+        "type": "function",
+        "z": "f6f2187d.f17ca8",
+        "name": "msg production",
+        "func": "msg.payload = { production: msg.payload }\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 400,
+        "y": 380,
+        "wires": [
+            [
+                "54e9e0e4651b12b9"
+            ]
+        ]
+    },
+    {
+        "id": "d165cf010c99a05f",
+        "type": "function",
+        "z": "f6f2187d.f17ca8",
+        "name": "msg light",
+        "func": "msg.payload = { light: msg.payload }\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 380,
+        "y": 440,
+        "wires": [
+            [
+                "54e9e0e4651b12b9"
+            ]
+        ]
+    },
+    {
+        "id": "3a141bcc3294c255",
+        "type": "debug",
+        "z": "f6f2187d.f17ca8",
+        "name": "debug 4",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 580,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "5a45ad35f0c5d14b",
+        "type": "mqtt in",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "topic": "solarPanel/1/temperature",
+        "qos": "0",
+        "datatype": "json",
+        "broker": "3f89dc9d9f939810",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 170,
+        "y": 580,
+        "wires": [
+            [
+                "da254d64d711ca4d"
+            ]
+        ]
+    },
+    {
+        "id": "0ab0f2c72e063419",
+        "type": "influxdb out",
+        "z": "f6f2187d.f17ca8",
+        "influxdb": "7ae4df28c6b53877",
+        "name": "",
+        "measurement": "SolarPanel1",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "database",
+        "precisionV18FluxV20": "s",
+        "retentionPolicyV18Flux": "",
+        "org": "univaq",
+        "bucket": "iot",
+        "x": 680,
+        "y": 640,
+        "wires": []
+    },
+    {
+        "id": "a426aa90216e024b",
+        "type": "mqtt in",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "topic": "solarPanel/1/production",
+        "qos": "0",
+        "datatype": "json",
+        "broker": "3f89dc9d9f939810",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 160,
+        "y": 640,
+        "wires": [
+            [
+                "099b1575a2a6d313"
+            ]
+        ]
+    },
+    {
+        "id": "0a3132f59a3dc9e9",
+        "type": "mqtt in",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "topic": "solarPanel/1/light",
+        "qos": "0",
+        "datatype": "json",
+        "broker": "3f89dc9d9f939810",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 140,
+        "y": 700,
+        "wires": [
+            [
+                "2d99296769240305"
+            ]
+        ]
+    },
+    {
+        "id": "da254d64d711ca4d",
+        "type": "function",
+        "z": "f6f2187d.f17ca8",
+        "name": "msg temperature",
+        "func": "msg.payload = {temperature:msg.payload}\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 410,
+        "y": 580,
+        "wires": [
+            [
+                "0ab0f2c72e063419"
+            ]
+        ]
+    },
+    {
+        "id": "099b1575a2a6d313",
+        "type": "function",
+        "z": "f6f2187d.f17ca8",
+        "name": "msg production",
+        "func": "msg.payload = { production: msg.payload }\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 400,
+        "y": 640,
+        "wires": [
+            [
+                "0ab0f2c72e063419"
+            ]
+        ]
+    },
+    {
+        "id": "2d99296769240305",
+        "type": "function",
+        "z": "f6f2187d.f17ca8",
+        "name": "msg light",
+        "func": "msg.payload = { light: msg.payload }\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 380,
+        "y": 700,
+        "wires": [
+            [
+                "0ab0f2c72e063419"
+            ]
+        ]
+    },
+    {
+        "id": "74397ce40d212aad",
+        "type": "mqtt in",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "topic": "solarPanel/2/temperature",
+        "qos": "0",
+        "datatype": "json",
+        "broker": "3f89dc9d9f939810",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 910,
+        "y": 280,
+        "wires": [
+            [
+                "293d02c7fd1294b3"
+            ]
+        ]
+    },
+    {
+        "id": "1e64b1d01bc7627a",
+        "type": "influxdb out",
+        "z": "f6f2187d.f17ca8",
+        "influxdb": "7ae4df28c6b53877",
+        "name": "",
+        "measurement": "SolarPanel2",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "database",
+        "precisionV18FluxV20": "s",
+        "retentionPolicyV18Flux": "",
+        "org": "univaq",
+        "bucket": "iot",
+        "x": 1420,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "95b944db52359f17",
+        "type": "mqtt in",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "topic": "solarPanel/2/production",
+        "qos": "0",
+        "datatype": "json",
+        "broker": "3f89dc9d9f939810",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 900,
+        "y": 340,
+        "wires": [
+            [
+                "1d1e4c0e47f43cc7"
+            ]
+        ]
+    },
+    {
+        "id": "665cc0d3d565beef",
+        "type": "mqtt in",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "topic": "solarPanel/2/light",
+        "qos": "0",
+        "datatype": "json",
+        "broker": "3f89dc9d9f939810",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 880,
+        "y": 400,
+        "wires": [
+            [
+                "5e858d441c521825"
+            ]
+        ]
+    },
+    {
+        "id": "293d02c7fd1294b3",
+        "type": "function",
+        "z": "f6f2187d.f17ca8",
+        "name": "msg temperature",
+        "func": "msg.payload = {temperature:msg.payload}\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1150,
+        "y": 280,
+        "wires": [
+            [
+                "1e64b1d01bc7627a"
+            ]
+        ]
+    },
+    {
+        "id": "1d1e4c0e47f43cc7",
+        "type": "function",
+        "z": "f6f2187d.f17ca8",
+        "name": "msg production",
+        "func": "msg.payload = { production: msg.payload }\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1140,
+        "y": 340,
+        "wires": [
+            [
+                "1e64b1d01bc7627a"
+            ]
+        ]
+    },
+    {
+        "id": "5e858d441c521825",
+        "type": "function",
+        "z": "f6f2187d.f17ca8",
+        "name": "msg light",
+        "func": "msg.payload = { light: msg.payload }\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1120,
+        "y": 400,
+        "wires": [
+            [
+                "1e64b1d01bc7627a"
+            ]
+        ]
+    },
+    {
+        "id": "6966aae16bcffffb",
+        "type": "mqtt in",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "topic": "solarPanel/3/temperature",
+        "qos": "0",
+        "datatype": "json",
+        "broker": "3f89dc9d9f939810",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 910,
+        "y": 460,
+        "wires": [
+            [
+                "2664d0cd225913af"
+            ]
+        ]
+    },
+    {
+        "id": "02a5735863b0e872",
+        "type": "influxdb out",
+        "z": "f6f2187d.f17ca8",
+        "influxdb": "7ae4df28c6b53877",
+        "name": "",
+        "measurement": "SolarPanel3",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "database",
+        "precisionV18FluxV20": "s",
+        "retentionPolicyV18Flux": "",
+        "org": "univaq",
+        "bucket": "iot",
+        "x": 1420,
+        "y": 520,
+        "wires": []
+    },
+    {
+        "id": "d4a18838246a28d8",
+        "type": "mqtt in",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "topic": "solarPanel/3/production",
+        "qos": "0",
+        "datatype": "json",
+        "broker": "3f89dc9d9f939810",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 900,
+        "y": 520,
+        "wires": [
+            [
+                "d470a31dad8eebcf"
+            ]
+        ]
+    },
+    {
+        "id": "84d6637d685b41a7",
+        "type": "mqtt in",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "topic": "solarPanel/3/light",
+        "qos": "0",
+        "datatype": "json",
+        "broker": "3f89dc9d9f939810",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 880,
+        "y": 580,
+        "wires": [
+            [
+                "7db670d12ce7dc69"
+            ]
+        ]
+    },
+    {
+        "id": "2664d0cd225913af",
+        "type": "function",
+        "z": "f6f2187d.f17ca8",
+        "name": "msg temperature",
+        "func": "msg.payload = {temperature:msg.payload}\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1150,
+        "y": 460,
+        "wires": [
+            [
+                "02a5735863b0e872"
+            ]
+        ]
+    },
+    {
+        "id": "d470a31dad8eebcf",
+        "type": "function",
+        "z": "f6f2187d.f17ca8",
+        "name": "msg production",
+        "func": "msg.payload = { production: msg.payload }\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1140,
+        "y": 520,
+        "wires": [
+            [
+                "02a5735863b0e872"
+            ]
+        ]
+    },
+    {
+        "id": "7db670d12ce7dc69",
+        "type": "function",
+        "z": "f6f2187d.f17ca8",
+        "name": "msg light",
+        "func": "msg.payload = { light: msg.payload }\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1120,
+        "y": 580,
+        "wires": [
+            [
+                "02a5735863b0e872"
+            ]
+        ]
+    },
+    {
+        "id": "4086e56df90e9543",
+        "type": "mqtt in",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "topic": "solarPanel/4/temperature",
+        "qos": "0",
+        "datatype": "json",
+        "broker": "3f89dc9d9f939810",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 170,
+        "y": 820,
+        "wires": [
+            [
+                "02aaf7e11040a3e4"
+            ]
+        ]
+    },
+    {
+        "id": "c37183b0e163bb9d",
+        "type": "influxdb out",
+        "z": "f6f2187d.f17ca8",
+        "influxdb": "7ae4df28c6b53877",
+        "name": "",
+        "measurement": "SolarPanel4",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "database",
+        "precisionV18FluxV20": "s",
+        "retentionPolicyV18Flux": "",
+        "org": "univaq",
+        "bucket": "iot",
+        "x": 680,
+        "y": 880,
+        "wires": []
+    },
+    {
+        "id": "c62633f5d5363570",
+        "type": "mqtt in",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "topic": "solarPanel/4/production",
+        "qos": "0",
+        "datatype": "json",
+        "broker": "3f89dc9d9f939810",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 160,
+        "y": 880,
+        "wires": [
+            [
+                "07b5150528205118"
+            ]
+        ]
+    },
+    {
+        "id": "d89bf5db6cc5c6a8",
+        "type": "mqtt in",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "topic": "solarPanel/4/light",
+        "qos": "0",
+        "datatype": "json",
+        "broker": "3f89dc9d9f939810",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 140,
+        "y": 940,
+        "wires": [
+            [
+                "5828d37da4c519e9"
+            ]
+        ]
+    },
+    {
+        "id": "02aaf7e11040a3e4",
+        "type": "function",
+        "z": "f6f2187d.f17ca8",
+        "name": "msg temperature",
+        "func": "msg.payload = {temperature:msg.payload}\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 410,
+        "y": 820,
+        "wires": [
+            [
+                "c37183b0e163bb9d"
+            ]
+        ]
+    },
+    {
+        "id": "07b5150528205118",
+        "type": "function",
+        "z": "f6f2187d.f17ca8",
+        "name": "msg production",
+        "func": "msg.payload = { production: msg.payload }\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 400,
+        "y": 880,
+        "wires": [
+            [
+                "c37183b0e163bb9d"
+            ]
+        ]
+    },
+    {
+        "id": "5828d37da4c519e9",
+        "type": "function",
+        "z": "f6f2187d.f17ca8",
+        "name": "msg light",
+        "func": "msg.payload = { light: msg.payload }\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 380,
+        "y": 940,
+        "wires": [
+            [
+                "c37183b0e163bb9d"
+            ]
+        ]
+    },
+    {
+        "id": "00424d8a1404b06e",
+        "type": "mqtt in",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "topic": "windTurbine/0/speed",
+        "qos": "0",
+        "datatype": "json",
+        "broker": "3f89dc9d9f939810",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 890,
+        "y": 660,
+        "wires": [
+            [
+                "fa8174e05cd0888b"
+            ]
+        ]
+    },
+    {
+        "id": "8a641df98f254df7",
+        "type": "influxdb out",
+        "z": "f6f2187d.f17ca8",
+        "influxdb": "7ae4df28c6b53877",
+        "name": "",
+        "measurement": "windTurbine0",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "database",
+        "precisionV18FluxV20": "s",
+        "retentionPolicyV18Flux": "",
+        "org": "univaq",
+        "bucket": "iot",
+        "x": 1420,
+        "y": 720,
+        "wires": []
+    },
+    {
+        "id": "1fd8f53e45e2a981",
+        "type": "mqtt in",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "topic": "windTurbine/0/production",
+        "qos": "0",
+        "datatype": "json",
+        "broker": "3f89dc9d9f939810",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 910,
+        "y": 720,
+        "wires": [
+            [
+                "977f702e72771fce"
+            ]
+        ]
+    },
+    {
+        "id": "e4c37655c40de7d3",
+        "type": "mqtt in",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "topic": "windTurbine/0/vibration",
+        "qos": "0",
+        "datatype": "json",
+        "broker": "3f89dc9d9f939810",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 900,
+        "y": 780,
+        "wires": [
+            [
+                "6ffd9d6b0f318d00"
+            ]
+        ]
+    },
+    {
+        "id": "fa8174e05cd0888b",
+        "type": "function",
+        "z": "f6f2187d.f17ca8",
+        "name": "msg speed",
+        "func": "msg.payload = {speed:msg.payload}\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1130,
+        "y": 660,
+        "wires": [
+            [
+                "8a641df98f254df7"
+            ]
+        ]
+    },
+    {
+        "id": "977f702e72771fce",
+        "type": "function",
+        "z": "f6f2187d.f17ca8",
+        "name": "msg production",
+        "func": "msg.payload = { production: msg.payload }\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1140,
+        "y": 720,
+        "wires": [
+            [
+                "8a641df98f254df7"
+            ]
+        ]
+    },
+    {
+        "id": "6ffd9d6b0f318d00",
+        "type": "function",
+        "z": "f6f2187d.f17ca8",
+        "name": "msg vibration",
+        "func": "msg.payload = { vibration: msg.payload }\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1130,
+        "y": 780,
+        "wires": [
+            [
+                "8a641df98f254df7"
+            ]
+        ]
+    },
+    {
+        "id": "9328db2b15709029",
+        "type": "mqtt in",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "topic": "windTurbine/1/speed",
+        "qos": "0",
+        "datatype": "json",
+        "broker": "3f89dc9d9f939810",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 150,
+        "y": 1060,
+        "wires": [
+            [
+                "920fcb913000e4a7"
+            ]
+        ]
+    },
+    {
+        "id": "0a924c856e480b4d",
+        "type": "influxdb out",
+        "z": "f6f2187d.f17ca8",
+        "influxdb": "7ae4df28c6b53877",
+        "name": "",
+        "measurement": "windTurbine1",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "database",
+        "precisionV18FluxV20": "s",
+        "retentionPolicyV18Flux": "",
+        "org": "univaq",
+        "bucket": "iot",
+        "x": 680,
+        "y": 1120,
+        "wires": []
+    },
+    {
+        "id": "b9a7358f77cc9847",
+        "type": "mqtt in",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "topic": "windTurbine/1/production",
+        "qos": "0",
+        "datatype": "json",
+        "broker": "3f89dc9d9f939810",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 170,
+        "y": 1120,
+        "wires": [
+            [
+                "b6fad86d3e72fe88"
+            ]
+        ]
+    },
+    {
+        "id": "794c299f3e72acf3",
+        "type": "mqtt in",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "topic": "windTurbine/1/vibration",
+        "qos": "0",
+        "datatype": "json",
+        "broker": "3f89dc9d9f939810",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 160,
+        "y": 1180,
+        "wires": [
+            [
+                "2857692b1256dd00"
+            ]
+        ]
+    },
+    {
+        "id": "920fcb913000e4a7",
+        "type": "function",
+        "z": "f6f2187d.f17ca8",
+        "name": "msg speed",
+        "func": "msg.payload = {speed:msg.payload}\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 390,
+        "y": 1060,
+        "wires": [
+            [
+                "0a924c856e480b4d"
+            ]
+        ]
+    },
+    {
+        "id": "b6fad86d3e72fe88",
+        "type": "function",
+        "z": "f6f2187d.f17ca8",
+        "name": "msg production",
+        "func": "msg.payload = { production: msg.payload }\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 400,
+        "y": 1120,
+        "wires": [
+            [
+                "0a924c856e480b4d"
+            ]
+        ]
+    },
+    {
+        "id": "2857692b1256dd00",
+        "type": "function",
+        "z": "f6f2187d.f17ca8",
+        "name": "msg vibration",
+        "func": "msg.payload = { vibration: msg.payload }\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 390,
+        "y": 1180,
+        "wires": [
+            [
+                "0a924c856e480b4d"
+            ]
+        ]
+    },
+    {
+        "id": "e0b798345b6ee733",
+        "type": "mqtt in",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "topic": "windTurbine/2/speed",
+        "qos": "0",
+        "datatype": "json",
+        "broker": "3f89dc9d9f939810",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 890,
+        "y": 860,
+        "wires": [
+            [
+                "40b61c52ec2aa50d"
+            ]
+        ]
+    },
+    {
+        "id": "a457a7bf86b597fd",
+        "type": "influxdb out",
+        "z": "f6f2187d.f17ca8",
+        "influxdb": "7ae4df28c6b53877",
+        "name": "",
+        "measurement": "windTurbine2",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "database",
+        "precisionV18FluxV20": "s",
+        "retentionPolicyV18Flux": "",
+        "org": "univaq",
+        "bucket": "iot",
+        "x": 1420,
+        "y": 920,
+        "wires": []
+    },
+    {
+        "id": "8c04d40e4a10ca85",
+        "type": "mqtt in",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "topic": "windTurbine/2/production",
+        "qos": "0",
+        "datatype": "json",
+        "broker": "3f89dc9d9f939810",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 910,
+        "y": 920,
+        "wires": [
+            [
+                "524dcd4d5099733d"
+            ]
+        ]
+    },
+    {
+        "id": "12db2543e646aa68",
+        "type": "mqtt in",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "topic": "windTurbine/2/vibration",
+        "qos": "0",
+        "datatype": "json",
+        "broker": "3f89dc9d9f939810",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 900,
+        "y": 980,
+        "wires": [
+            [
+                "6dbb4fd71f75c782"
+            ]
+        ]
+    },
+    {
+        "id": "40b61c52ec2aa50d",
+        "type": "function",
+        "z": "f6f2187d.f17ca8",
+        "name": "msg speed",
+        "func": "msg.payload = {speed:msg.payload}\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1130,
+        "y": 860,
+        "wires": [
+            [
+                "a457a7bf86b597fd"
+            ]
+        ]
+    },
+    {
+        "id": "524dcd4d5099733d",
+        "type": "function",
+        "z": "f6f2187d.f17ca8",
+        "name": "msg production",
+        "func": "msg.payload = { production: msg.payload }\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1140,
+        "y": 920,
+        "wires": [
+            [
+                "a457a7bf86b597fd"
+            ]
+        ]
+    },
+    {
+        "id": "6dbb4fd71f75c782",
+        "type": "function",
+        "z": "f6f2187d.f17ca8",
+        "name": "msg vibration",
+        "func": "msg.payload = { vibration: msg.payload }\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1130,
+        "y": 980,
+        "wires": [
+            [
+                "a457a7bf86b597fd"
+            ]
+        ]
+    },
+    {
+        "id": "73dc294829769a59",
+        "type": "comment",
+        "z": "f6f2187d.f17ca8",
+        "name": "info",
+        "info": "environmental generated info",
+        "x": 550,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "aa2cd8b5c7a79735",
+        "type": "comment",
+        "z": "f6f2187d.f17ca8",
+        "name": "solar panel 1",
+        "info": "generated info about solar Panel 1",
+        "x": 590,
+        "y": 700,
+        "wires": []
+    },
+    {
+        "id": "fbbfff7fd1cec561",
+        "type": "comment",
+        "z": "f6f2187d.f17ca8",
+        "name": "solar panel 4",
+        "info": "generated info about solar Panel 4",
+        "x": 610,
+        "y": 940,
+        "wires": []
+    },
+    {
+        "id": "34d0f9a787a72f18",
+        "type": "comment",
+        "z": "f6f2187d.f17ca8",
+        "name": "wind turbine 1",
+        "info": "generated info about wind turbine 1",
+        "x": 610,
+        "y": 1180,
+        "wires": []
+    },
+    {
+        "id": "5ce365d8b13613cf",
+        "type": "comment",
+        "z": "f6f2187d.f17ca8",
+        "name": "solar panel 0",
+        "info": "generated info about solar Panel 0",
+        "x": 610,
+        "y": 440,
+        "wires": []
+    },
+    {
+        "id": "249f4c783912c24c",
+        "type": "comment",
+        "z": "f6f2187d.f17ca8",
+        "name": "wind turbine 2",
+        "info": "generated info about wind turbine 2",
+        "x": 1370,
+        "y": 980,
+        "wires": []
+    },
+    {
+        "id": "0be78a0c22f91c04",
+        "type": "comment",
+        "z": "f6f2187d.f17ca8",
+        "name": "wind turbine 0",
+        "info": "generated info about wind turbine 0",
+        "x": 1370,
+        "y": 780,
+        "wires": []
+    },
+    {
+        "id": "2e737283fe19d161",
+        "type": "comment",
+        "z": "f6f2187d.f17ca8",
+        "name": "solar panel 3",
+        "info": "generated info about solar Panel 3",
+        "x": 1370,
+        "y": 580,
+        "wires": []
+    },
+    {
+        "id": "aee6210ede44f08f",
+        "type": "comment",
+        "z": "f6f2187d.f17ca8",
+        "name": "solar panel 2",
+        "info": "generated info about solar Panel 2",
+        "x": 1390,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "3f89dc9d9f939810",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "172.20.0.100",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "cd00130e58b07552",
+        "type": "ui_group",
+        "name": "sensors",
+        "tab": "2589211dbdb579e4",
+        "order": 1,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "7ae4df28c6b53877",
+        "type": "influxdb",
+        "hostname": "127.0.0.1",
+        "port": "8086",
+        "protocol": "http",
+        "database": "database",
+        "name": "iot",
+        "usetls": false,
+        "tls": "",
+        "influxdbVersion": "2.0",
+        "url": "http://172.17.0.5:8086",
+        "rejectUnauthorized": true
+    },
+    {
+        "id": "2589211dbdb579e4",
+        "type": "ui_tab",
+        "name": "dayTest",
+        "icon": "dashboard",
+        "disabled": false,
+        "hidden": false
+    }
+]
