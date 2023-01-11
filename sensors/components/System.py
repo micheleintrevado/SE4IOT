@@ -11,6 +11,6 @@ class System:
           self.wind = randint(0,2)
           self.day = randint(0,1)
 
-          client.publish("system/weather", self.weather)
-          client.publish("system/wind", self.wind)
-          client.publish("system/day", self.day)
+          client.publish("system/weather", self.weather, retain=True)
+          client.publish("system/wind", self.wind, retain=True)
+          client.publish("system/day", self.day, retain=True)

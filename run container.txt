@@ -4,4 +4,12 @@ docker network create --subnet=172.20.0.0/16 iot_network
 
 runnare il container tramite
 
-docker run --network iot_network --ip 172.20.0.100 [-p xxxx:xxxx] -it --name containerName imageNetwork
+docker run --network my_network --ip 172.20.0.100 [-p xxxx:xxxx] -it --name containerName imageNetwork
+
+ip list :
+	- moquitto: 172.20.0.100
+	- iot_sensors: 172.20.0.101
+	- nodered: 172.20.0.102
+	- influxdb: 172.20.0.103
+	- grafana: 172.20.0.104
+	- iot_data_preditction: 172.20.0.105

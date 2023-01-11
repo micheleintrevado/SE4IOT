@@ -5,7 +5,7 @@ from paho.mqtt.client import Client
 class WindTurbine:
     @staticmethod
     def initialize_running(index: int, client: Client, value: int):
-        client.publish(f"WindTurbine/{index}/running", value)
+        client.publish(f"WindTurbine/{index}/running", value, retain=True)
     @staticmethod
     def simulate(index: int, client: Client, wind: int):
 
@@ -27,6 +27,6 @@ class WindTurbine:
                 production = randint(70, 100)
                 vibration = 8
 
-        client.publish(f"windTurbine/{index}/speed", speed)
-        client.publish(f"windTurbine/{index}/production", production)
-        client.publish(f"windTurbine/{index}/vibration", vibration)
+        client.publish(f"windTurbine/{index}/speed", speed, retain=True)
+        client.publish(f"windTurbine/{index}/production", production, retain=True)
+        client.publish(f"windTurbine/{index}/vibration", vibration, retain=True)

@@ -5,7 +5,7 @@ from random import randint
 class SolarPanel:
     @staticmethod
     def initialize_shield(index: int, client: Client, value: int):
-        client.publish(f"SolarPanel/{index}/shield", value)
+        client.publish(f"SolarPanel/{index}/shield", value, retain=True)
     @staticmethod
     def simulate(index: int, client: Client, day: int, weather: int):
 
@@ -37,6 +37,6 @@ class SolarPanel:
             production = 0
             light = 0
 
-        client.publish(f"solarPanel/{index}/temperature", temperature)
-        client.publish(f"solarPanel/{index}/production", production)
-        client.publish(f"solarPanel/{index}/light", light)
+        client.publish(f"solarPanel/{index}/temperature", temperature, retain=True)
+        client.publish(f"solarPanel/{index}/production", production, retain=True)
+        client.publish(f"solarPanel/{index}/light", light, retain=True)
