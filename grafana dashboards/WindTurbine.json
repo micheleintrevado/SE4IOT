@@ -1,0 +1,315 @@
+{
+     "annotations": {
+       "list": [
+         {
+           "builtIn": 1,
+           "datasource": {
+             "type": "grafana",
+             "uid": "-- Grafana --"
+           },
+           "enable": true,
+           "hide": true,
+           "iconColor": "rgba(0, 211, 255, 1)",
+           "name": "Annotations & Alerts",
+           "target": {
+             "limit": 100,
+             "matchAny": false,
+             "tags": [],
+             "type": "dashboard"
+           },
+           "type": "dashboard"
+         }
+       ]
+     },
+     "editable": true,
+     "fiscalYearStartMonth": 0,
+     "graphTooltip": 0,
+     "id": 2,
+     "links": [],
+     "liveNow": false,
+     "panels": [
+       {
+         "datasource": {
+           "type": "influxdb",
+           "uid": "rz86UU2Vk"
+         },
+         "fieldConfig": {
+           "defaults": {
+             "color": {
+               "mode": "palette-classic"
+             },
+             "custom": {
+               "axisCenteredZero": false,
+               "axisColorMode": "text",
+               "axisLabel": "",
+               "axisPlacement": "auto",
+               "barAlignment": 0,
+               "drawStyle": "line",
+               "fillOpacity": 0,
+               "gradientMode": "none",
+               "hideFrom": {
+                 "legend": false,
+                 "tooltip": false,
+                 "viz": false
+               },
+               "lineInterpolation": "linear",
+               "lineWidth": 1,
+               "pointSize": 5,
+               "scaleDistribution": {
+                 "type": "linear"
+               },
+               "showPoints": "auto",
+               "spanNulls": false,
+               "stacking": {
+                 "group": "A",
+                 "mode": "none"
+               },
+               "thresholdsStyle": {
+                 "mode": "off"
+               }
+             },
+             "mappings": [],
+             "thresholds": {
+               "mode": "absolute",
+               "steps": [
+                 {
+                   "color": "green",
+                   "value": null
+                 },
+                 {
+                   "color": "red",
+                   "value": 80
+                 }
+               ]
+             }
+           },
+           "overrides": []
+         },
+         "gridPos": {
+           "h": 9,
+           "w": 12,
+           "x": 0,
+           "y": 0
+         },
+         "id": 2,
+         "options": {
+           "legend": {
+             "calcs": [],
+             "displayMode": "list",
+             "placement": "bottom",
+             "showLegend": true
+           },
+           "tooltip": {
+             "mode": "single",
+             "sort": "none"
+           }
+         },
+         "targets": [
+           {
+             "datasource": {
+               "type": "influxdb",
+               "uid": "rz86UU2Vk"
+             },
+             "query": "from(bucket: \"iot\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"windTurbine0\" or r[\"_measurement\"] == \"windTurbine1\" or r[\"_measurement\"] == \"windTurbine2\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"production\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\r\n  |> yield(name: \"mean\")",
+             "refId": "A"
+           }
+         ],
+         "title": "Wind Turbine Production",
+         "type": "timeseries"
+       },
+       {
+         "datasource": {
+           "type": "influxdb",
+           "uid": "rz86UU2Vk"
+         },
+         "fieldConfig": {
+           "defaults": {
+             "color": {
+               "mode": "palette-classic"
+             },
+             "custom": {
+               "axisCenteredZero": false,
+               "axisColorMode": "text",
+               "axisLabel": "",
+               "axisPlacement": "auto",
+               "barAlignment": 0,
+               "drawStyle": "line",
+               "fillOpacity": 0,
+               "gradientMode": "none",
+               "hideFrom": {
+                 "legend": false,
+                 "tooltip": false,
+                 "viz": false
+               },
+               "lineInterpolation": "linear",
+               "lineWidth": 1,
+               "pointSize": 5,
+               "scaleDistribution": {
+                 "type": "linear"
+               },
+               "showPoints": "auto",
+               "spanNulls": false,
+               "stacking": {
+                 "group": "A",
+                 "mode": "none"
+               },
+               "thresholdsStyle": {
+                 "mode": "off"
+               }
+             },
+             "mappings": [],
+             "thresholds": {
+               "mode": "absolute",
+               "steps": [
+                 {
+                   "color": "green",
+                   "value": null
+                 },
+                 {
+                   "color": "red",
+                   "value": 80
+                 }
+               ]
+             }
+           },
+           "overrides": []
+         },
+         "gridPos": {
+           "h": 9,
+           "w": 12,
+           "x": 12,
+           "y": 0
+         },
+         "id": 4,
+         "options": {
+           "legend": {
+             "calcs": [],
+             "displayMode": "list",
+             "placement": "bottom",
+             "showLegend": true
+           },
+           "tooltip": {
+             "mode": "single",
+             "sort": "none"
+           }
+         },
+         "targets": [
+           {
+             "datasource": {
+               "type": "influxdb",
+               "uid": "rz86UU2Vk"
+             },
+             "query": "from(bucket: \"iot\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"windTurbine0\" or r[\"_measurement\"] == \"windTurbine1\" or r[\"_measurement\"] == \"windTurbine2\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"speed\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\r\n  |> yield(name: \"mean\")",
+             "refId": "A"
+           }
+         ],
+         "title": "Wind Turbine Speed",
+         "type": "timeseries"
+       },
+       {
+         "datasource": {
+           "type": "influxdb",
+           "uid": "rz86UU2Vk"
+         },
+         "fieldConfig": {
+           "defaults": {
+             "color": {
+               "mode": "palette-classic"
+             },
+             "custom": {
+               "axisCenteredZero": false,
+               "axisColorMode": "text",
+               "axisLabel": "",
+               "axisPlacement": "auto",
+               "barAlignment": 0,
+               "drawStyle": "line",
+               "fillOpacity": 0,
+               "gradientMode": "none",
+               "hideFrom": {
+                 "legend": false,
+                 "tooltip": false,
+                 "viz": false
+               },
+               "lineInterpolation": "linear",
+               "lineWidth": 1,
+               "pointSize": 5,
+               "scaleDistribution": {
+                 "type": "linear"
+               },
+               "showPoints": "auto",
+               "spanNulls": false,
+               "stacking": {
+                 "group": "A",
+                 "mode": "none"
+               },
+               "thresholdsStyle": {
+                 "mode": "off"
+               }
+             },
+             "mappings": [],
+             "thresholds": {
+               "mode": "absolute",
+               "steps": [
+                 {
+                   "color": "green",
+                   "value": null
+                 },
+                 {
+                   "color": "red",
+                   "value": 80
+                 }
+               ]
+             }
+           },
+           "overrides": []
+         },
+         "gridPos": {
+           "h": 8,
+           "w": 12,
+           "x": 0,
+           "y": 9
+         },
+         "id": 6,
+         "options": {
+           "legend": {
+             "calcs": [],
+             "displayMode": "list",
+             "placement": "bottom",
+             "showLegend": true
+           },
+           "tooltip": {
+             "mode": "single",
+             "sort": "none"
+           }
+         },
+         "targets": [
+           {
+             "datasource": {
+               "type": "influxdb",
+               "uid": "rz86UU2Vk"
+             },
+             "query": "from(bucket: \"iot\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"windTurbine0\" or r[\"_measurement\"] == \"windTurbine1\" or r[\"_measurement\"] == \"windTurbine2\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"vibration\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\r\n  |> yield(name: \"mean\")",
+             "refId": "A"
+           }
+         ],
+         "title": "Wind Turbine Vibration",
+         "type": "timeseries"
+       }
+     ],
+     "schemaVersion": 37,
+     "style": "dark",
+     "tags": [],
+     "templating": {
+       "list": []
+     },
+     "time": {
+       "from": "now-6h",
+       "to": "now"
+     },
+     "timepicker": {},
+     "timezone": "",
+     "title": "Wind Turbine",
+     "uid": "XIlFwUhVz",
+     "version": 4,
+     "weekStart": ""
+   }
