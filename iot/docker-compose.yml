@@ -65,6 +65,20 @@ services:
       - predictions
       - influxdb
 
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    volumes:
+      - ./grafana:/var/lib/grafana
+    restart: always
+    ports:
+      - "3000:3000"
+    networks:
+      network:
+        ipv4_address: 172.20.0.104
+    depends_on:
+      - influxdb
+
 
 networks:
   network:
