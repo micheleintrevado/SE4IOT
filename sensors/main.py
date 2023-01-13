@@ -9,12 +9,19 @@ def main():
     system = System()
     client = mqtt.Client("ID1")
     client.on_publish = lambda client, userdata, mid: print("PUBLISH: ", mid)
-    client.connect("172.20.0.100")
+    connected = False
+    while not connected:
+        try:
+            if client.connect("172.20.0.100") == 0:
+                connected = True
+        except:
+            print("Connection failed")
+            time.sleep(5)
 
-    for index in range (0,5):
+    for index in range(0, 5):
         SolarPanel.initialize_shield(index, client, 0)
 
-    for index in range (0,5):
+    for index in range(0, 3):
         WindTurbine.initialize_running(index, client, 1)
 
     while True:

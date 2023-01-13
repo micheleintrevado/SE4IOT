@@ -1,0 +1,74 @@
+version: "3.8"
+
+services:
+
+  mosquitto:
+    image: eclipse-mosquitto:latest
+    container_name: mosquitto
+    volumes:
+      - ./mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf
+    restart: always
+    ports:
+      - 1883:1883
+      - 9001:9001
+    networks:
+      network:
+        ipv4_address: 172.20.0.100
+
+  sensors:
+    image: iot_sensors:latest
+    container_name: sensors
+    restart: always
+    networks:
+      network:
+        ipv4_address: 172.20.0.101
+    depends_on:
+      - mosquitto
+
+  influxdb:
+    image: influxdb:latest
+    container_name: influxdb
+    restart: always
+    ports:
+      - 8086:8086
+    networks:
+      network:
+        ipv4_address: 172.20.0.103
+    volumes:
+      - ./influxdb/data/:/var/lib/influxdb2
+      - ./influxdb/config/:/etc/influxdb2
+
+  predictions:
+    image: iot_predictions:latest
+    container_name: predictions
+    restart: always
+    ports:
+      - 5000:5000
+    networks:
+      network:
+        ipv4_address: 172.20.0.105
+
+  node-red:
+    image: nodered/node-red:latest
+    container_name: node-red
+    restart: always
+    ports:
+      - 1880:1880
+    networks:
+      network:
+        ipv4_address: 172.20.0.102
+    volumes:
+      - ./node-red:/data
+    depends_on:
+      - mosquitto
+      - sensors
+      - predictions
+      - influxdb
+
+
+networks:
+  network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
