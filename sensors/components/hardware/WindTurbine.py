@@ -8,7 +8,7 @@ class WindTurbine:
         client.publish(f"windTurbine/{index}/running", value, retain=True)
 
     @staticmethod
-    def simulate(index: int, client: Client, wind: int):
+    def simulate(index: int, client: Client, wind: int, running: int):
 
         speed = 0
         production = 0
@@ -28,6 +28,11 @@ class WindTurbine:
                 production = randint(70, 100)
                 vibration = 8
 
-        client.publish(f"windTurbine/{index}/speed", speed, retain=True)
-        client.publish(f"windTurbine/{index}/production", production, retain=True)
-        client.publish(f"windTurbine/{index}/vibration", vibration, retain=True)
+        if running == 1:
+            client.publish(f"windTurbine/{index}/speed", speed, retain=True)
+            client.publish(f"windTurbine/{index}/production", production, retain=True)
+            client.publish(f"windTurbine/{index}/vibration", vibration, retain=True)
+        else:
+            client.publish(f"windTurbine/{index}/speed", 0, retain=True)
+            client.publish(f"windTurbine/{index}/production", 0, retain=True)
+            client.publish(f"windTurbine/{index}/vibration", 0, retain=True)

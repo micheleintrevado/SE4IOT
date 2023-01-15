@@ -8,7 +8,7 @@ class SolarPanel:
         client.publish(f"solarPanel/{index}/shield", value, retain=True)
 
     @staticmethod
-    def simulate(index: int, client: Client, day: int, weather: int):
+    def simulate(index: int, client: Client, day: int, weather: int, shield: int):
 
         temperature = 0
         production = 0
@@ -38,6 +38,11 @@ class SolarPanel:
             production = 0
             light = 0
 
-        client.publish(f"solarPanel/{index}/temperature", temperature, retain=True)
-        client.publish(f"solarPanel/{index}/production", production, retain=True)
-        client.publish(f"solarPanel/{index}/light", light, retain=True)
+        if shield == 0:
+            client.publish(f"solarPanel/{index}/temperature", temperature, retain=True)
+            client.publish(f"solarPanel/{index}/production", production, retain=True)
+            client.publish(f"solarPanel/{index}/light", light, retain=True)
+        else:
+            client.publish(f"solarPanel/{index}/temperature", 0, retain=True)
+            client.publish(f"solarPanel/{index}/production", 0, retain=True)
+            client.publish(f"solarPanel/{index}/light", 0, retain=True)
