@@ -13,4 +13,4 @@ def index(value):
     predicted_value = model.predict(value)
     return json.dumps(predicted_value)
 
-app.run(debug=True,host='172.20.0.105', port=5000)
+app.run(debug=True, host='172.20.0.105', port=5000)

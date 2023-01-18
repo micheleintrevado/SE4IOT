@@ -65,7 +65,7 @@ def main():
             WindTurbine.simulate(index, client, system.wind, running[index])
         client_wind.loop_stop()
 
-        time.sleep(30)
+        time.sleep(3)
 
 
 if __name__ == "__main__":
