@@ -1,3 +1,4 @@
+import time
 from paho.mqtt.client import Client
 from random import randint
 
@@ -11,7 +12,12 @@ class System:
     def publish(self, client: Client):
         self.weather = randint(0, 3)
         self.wind = randint(0, 2)
-        self.day = randint(0, 1)
+
+        my_time = time.localtime()
+        if my_time.tm_hour < 6 or my_time.tm_hour > 18:
+            self.day = 0
+        else:
+            self.day = 1
 
         if self.day == 1:
             match self.weather:
